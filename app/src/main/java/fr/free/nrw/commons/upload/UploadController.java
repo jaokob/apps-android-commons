@@ -105,10 +105,8 @@ public class UploadController {
      * @param contribution the contribution object
      * @param onComplete   the progress tracker
      */
-    @SuppressLint("StaticFieldLeak")
-    private void startUpload(final Contribution contribution, final ContributionUploadProgress onComplete) {
-        //Set creator, desc, and license
 
+    private void checkAuthorname(final Contribution contribution, final ContributionUploadProgress onComplete){
         // If author name is enabled and set, use it
         if (defaultKvStore.getBoolean("useAuthorName", false)) {
             String authorName = defaultKvStore.getString("authorName", "");
@@ -129,6 +127,11 @@ public class UploadController {
         if (contribution.getDescription() == null) {
             contribution.setDescription("");
         }
+    }
+    @SuppressLint("StaticFieldLeak")
+    private void startUpload(final Contribution contribution, final ContributionUploadProgress onComplete) {
+        //Set creator, desc, and license
+        checkAuthorname(contribution, onComplete);
 
         String license = defaultKvStore.getString(Prefs.DEFAULT_LICENSE, Prefs.Licenses.CC_BY_SA_3);
         contribution.setLicense(license);
