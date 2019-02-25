@@ -183,24 +183,28 @@ public class UploadController {
                 }
 
                 if (imagePrefix && contribution.getDateCreated() == null) {
-                    Timber.d("local uri   " + contribution.getLocalUri());
-                    Cursor cursor = contentResolver.query(contribution.getLocalUri(),
-                            new String[]{MediaStore.Images.ImageColumns.DATE_TAKEN}, null, null, null);
-                    if (cursor != null && cursor.getCount() != 0 && cursor.getColumnCount() != 0) {
-                        cursor.moveToFirst();
-                        Date dateCreated = new Date(cursor.getLong(0));
-                        Date epochStart = new Date(0);
-                        if (dateCreated.equals(epochStart) || dateCreated.before(epochStart)) {
-                            // If date is incorrect (1st second of unix time) then set it to the current date
-                            dateCreated = new Date();
-                        }
-                        contribution.setDateCreated(dateCreated);
-                        cursor.close();
-                    } else {
-                        contribution.setDateCreated(new Date());
-                    }
+                    dateImagePrefix(contentResolver);
                 }
                 return contribution;
+            }
+
+            private void dateImagePrefix(ContentResolver contentResolver){
+                Timber.d("local uri   " + contribution.getLocalUri());
+                Cursor cursor = contentResolver.query(contribution.getLocalUri(),
+                        new String[]{MediaStore.Images.ImageColumns.DATE_TAKEN}, null, null, null);
+                if (cursor != null && cursor.getCount() != 0 && cursor.getColumnCount() != 0) {
+                    cursor.moveToFirst();
+                    Date dateCreated = new Date(cursor.getLong(0));
+                    Date epochStart = new Date(0);
+                    if (dateCreated.equals(epochStart) || dateCreated.before(epochStart)) {
+                        // If date is incorrect (1st second of unix time) then set it to the current date
+                        dateCreated = new Date();
+                    }
+                    contribution.setDateCreated(dateCreated);
+                    cursor.close();
+                } else {
+                    contribution.setDateCreated(new Date());
+                }
             }
 
             @Override
