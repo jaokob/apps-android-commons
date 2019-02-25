@@ -308,7 +308,8 @@ public class FilePicker implements Constants {
         }
     }
 
-    public static void handleResultCode(int requestCode, int resultCode, Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks){
+    //helper code to handle resultCode for handleActivityResult function
+    public static void handleResultCode(int requestCode, int resultCode, Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS && !isPhoto(data)) {
                 onPictureReturnedFromDocuments(data, activity, callbacks);
@@ -333,6 +334,7 @@ public class FilePicker implements Constants {
             }
         }
     }
+
     public static void handleActivityResult(int requestCode, int resultCode, Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
         boolean isHandledPickedFile = (requestCode & RequestCodes.FILE_PICKER_IMAGE_IDENTIFICATOR) > 0;
         if (isHandledPickedFile) {
@@ -341,7 +343,7 @@ public class FilePicker implements Constants {
                     requestCode == RequestCodes.TAKE_PICTURE ||
                     requestCode == RequestCodes.CAPTURE_VIDEO ||
                     requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS) {
-                    handleResultCode(requestCode,resultCode,  data, activity,  callbacks);
+                handleResultCode(requestCode, resultCode, data, activity, callbacks);
             }
         }
     }
