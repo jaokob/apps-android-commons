@@ -308,6 +308,31 @@ public class FilePicker implements Constants {
         }
     }
 
+    public static void handleResultCode(int requestCode, int resultCode, Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS && !isPhoto(data)) {
+                onPictureReturnedFromDocuments(data, activity, callbacks);
+            } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY && !isPhoto(data)) {
+                onPictureReturnedFromGallery(data, activity, callbacks);
+            } else if (requestCode == RequestCodes.TAKE_PICTURE) {
+                onPictureReturnedFromCamera(activity, callbacks);
+            } else if (requestCode == RequestCodes.CAPTURE_VIDEO) {
+                onVideoReturnedFromCamera(activity, callbacks);
+            } else if (isPhoto(data)) {
+                onPictureReturnedFromCamera(activity, callbacks);
+            } else {
+                onPictureReturnedFromDocuments(data, activity, callbacks);
+            }
+        } else {
+            if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS) {
+                callbacks.onCanceled(FilePicker.ImageSource.DOCUMENTS, restoreType(activity));
+            } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY) {
+                callbacks.onCanceled(FilePicker.ImageSource.GALLERY, restoreType(activity));
+            } else {
+                callbacks.onCanceled(FilePicker.ImageSource.CAMERA_IMAGE, restoreType(activity));
+            }
+        }
+    }
     public static void handleActivityResult(int requestCode, int resultCode, Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
         boolean isHandledPickedFile = (requestCode & RequestCodes.FILE_PICKER_IMAGE_IDENTIFICATOR) > 0;
         if (isHandledPickedFile) {
@@ -316,29 +341,7 @@ public class FilePicker implements Constants {
                     requestCode == RequestCodes.TAKE_PICTURE ||
                     requestCode == RequestCodes.CAPTURE_VIDEO ||
                     requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS) {
-                if (resultCode == Activity.RESULT_OK) {
-                    if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS && !isPhoto(data)) {
-                        onPictureReturnedFromDocuments(data, activity, callbacks);
-                    } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY && !isPhoto(data)) {
-                        onPictureReturnedFromGallery(data, activity, callbacks);
-                    } else if (requestCode == RequestCodes.TAKE_PICTURE) {
-                        onPictureReturnedFromCamera(activity, callbacks);
-                    } else if (requestCode == RequestCodes.CAPTURE_VIDEO) {
-                        onVideoReturnedFromCamera(activity, callbacks);
-                    } else if (isPhoto(data)) {
-                        onPictureReturnedFromCamera(activity, callbacks);
-                    } else {
-                        onPictureReturnedFromDocuments(data, activity, callbacks);
-                    }
-                } else {
-                    if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS) {
-                        callbacks.onCanceled(FilePicker.ImageSource.DOCUMENTS, restoreType(activity));
-                    } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY) {
-                        callbacks.onCanceled(FilePicker.ImageSource.GALLERY, restoreType(activity));
-                    } else {
-                        callbacks.onCanceled(FilePicker.ImageSource.CAMERA_IMAGE, restoreType(activity));
-                    }
-                }
+                    handleResultCode(requestCode,resultCode,  data, activity,  callbacks);
             }
         }
     }
@@ -394,13 +397,11 @@ public class FilePicker implements Constants {
 
     public static File lastlyTakenButCanceledVideo(@NonNull Context context) {
         String filePath = PreferenceManager.getDefaultSharedPreferences(context).getString(KEY_LAST_CAMERA_VIDEO, null);
-        if (filePath == null) return null;
         File file = new File(filePath);
-        if (file.exists()) {
+        if (filePath != null && file.exists()) {
             return file;
-        } else {
-            return null;
         }
+        return null;
     }
 
     private static void onPictureReturnedFromDocuments(Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
