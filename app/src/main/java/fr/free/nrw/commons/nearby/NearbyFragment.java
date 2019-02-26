@@ -285,11 +285,20 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
             return;
         }
 
-        /*
-        onOrientation changed is true whenever activities orientation changes. After orientation
-        change we want to refresh map significantly, doesn't matter if location changed significantly
-        or not. Thus, we included onOrientationChanged boolean to if clause
-         */
+        isOnOrientation(locationChangeType);
+
+        if (nearbyMapFragment != null && nearbyMapFragment.searchThisAreaButton != null) {
+            nearbyMapFragment.searchThisAreaButton.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * onOrientation changed is true whenever activities orientation changes. After orientation
+     * change we want to refresh map significantly, doesn't matter if location changed significantly
+     * or not. Thus, we included onOrientationChanged boolean to if clause
+     * @param locationChangeType defines if location changed significantly or slightly
+     */
+    private void isOnOrientation(LocationServiceManager.LocationChangeType locationChangeType){
         if (locationChangeType.equals(LOCATION_SIGNIFICANTLY_CHANGED)
                 || locationChangeType.equals(PERMISSION_JUST_GRANTED)
                 || locationChangeType.equals(MAP_UPDATED)
@@ -317,10 +326,6 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
             String gsonCurLatLng = gson.toJson(curLatLng);
             bundle.putString("CurLatLng", gsonCurLatLng);
             updateMapFragment(false,true, null, null);
-        }
-
-        if (nearbyMapFragment != null && nearbyMapFragment.searchThisAreaButton != null) {
-            nearbyMapFragment.searchThisAreaButton.setVisibility(View.GONE);
         }
     }
 
@@ -454,7 +459,20 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
             return;
         }
 
+        maybeSignificantUpdate(updateViaButton, isSlightUpdate, customLatLng, nearbyPlacesInfo);
 
+
+    }
+
+    /**
+     * Update map fragment
+     * @param updateViaButton search this area button is clicked
+     * @param isSlightUpdate Means no need to update markers, just follow user location with camera
+     * @param customLatLng Will be used for updates for other locations than users current location.
+     *                      Ie. when we use search this area feature
+     * @param nearbyPlacesInfo Includes nearby places list and boundary coordinates
+     */
+    private void maybeSignificantUpdate(boolean updateViaButton, boolean isSlightUpdate, @Nullable LatLng customLatLng, @Nullable NearbyController.NearbyPlacesInfo nearbyPlacesInfo){
         if (nearbyMapFragment != null && curLatLng != null) {
             hideProgressBar(); // In case it is visible (this happens, not an impossible case)
             /*
@@ -491,23 +509,9 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
                 return;
             }
 
-            /*
-            If this is the map update just after orientation change, then it is not a slight update
-            anymore. We want to significantly update map after each orientation change
-             */
-            if (onOrientationChanged) {
-                isSlightUpdate = false;
-                onOrientationChanged = false;
-            }
+            isSlightUpdate = setOrientationChanged(isSlightUpdate);
 
-            if (isSlightUpdate) {
-                nearbyMapFragment.setBundleForUpdates(bundle);
-                nearbyMapFragment.updateMapSlightly();
-            } else {
-                nearbyMapFragment.setBundleForUpdates(bundle);
-                nearbyMapFragment.updateMapSignificantlyForCurrentLocation();
-                updateListFragment();
-            }
+            maybeUpdateListFragment(isSlightUpdate);
         } else {
             lockNearbyView(true);
             setMapFragment();
@@ -517,11 +521,41 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
         }
     }
 
+    /*
+    If this is the map update just after orientation change, then it is not a slight update
+    anymore. We want to significantly update map after each orientation change
+    */
+    private boolean setOrientationChanged(boolean isSlightUpdate){
+        if (onOrientationChanged) {
+            isSlightUpdate = false;
+            onOrientationChanged = false;
+        }
+        return isSlightUpdate;
+    }
+
+    /**
+     * Updates list fragment
+     * For slight update: update map slightly
+     * For significant update: update list fragment
+     * @param isSlightUpdate Means no need to update list fragment
+     */
+    private void maybeUpdateListFragment(boolean isSlightUpdate){
+        if (isSlightUpdate) {
+            nearbyMapFragment.setBundleForUpdates(bundle);
+            nearbyMapFragment.updateMapSlightly();
+        } else {
+            nearbyMapFragment.setBundleForUpdates(bundle);
+            nearbyMapFragment.updateMapSignificantlyForCurrentLocation();
+            updateListFragment();
+        }
+    }
+
+
     /**
      * Updates already existing list fragment with bundle includes nearby places and boundary
      * coordinates
      */
-    private void updateListFragment() {
+    public void updateListFragment() {
         nearbyListFragment.setBundleForUpdates(bundle);
         nearbyListFragment.updateNearbyListSignificantly();
     }
