@@ -29,6 +29,9 @@ The project provided a [quick start guide for developers](https://github.com/com
 
 When opening the `Android studio`  some of our group members were prompted to automatically update some programs which would cause the project not to work properly. This could have been documented in the quick start guide.
 
+The group members were having different experiences regarding the build process. For some it took an incredible amount of time whereas for some it went quite smoothly. Some of us did not even exactly follow the 
+project’s startup guide and still got it to build. 
+
 ## Requirements affected by functionality being refactored
 
 The issue of the project that our group focused on required high complexity classes with particularly high measure of CCN to be refactored. The refactoring would then address functions with high CCN and attempt to reduce their complexity for the purpose of reducing the complexity of the corresponding classes as a whole.
