@@ -1,6 +1,6 @@
 # Report for assignment 4
 
-This report is written by KTH students taking the course DD2480-Software Engineering  for the purpose of assignment 4.
+This report is written by KTH students taking the course DD2480-Software Engineering for the purpose of assignment 4.
 Group 9
 
 ## Project
