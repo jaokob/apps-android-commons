@@ -158,73 +158,109 @@ public abstract class NavigationBaseActivity extends BaseActivity
         final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_login:
-                drawerLayout.closeDrawer(navigationView);
-                startActivityWithFlags(
-                        this, LoginActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                applicationKvStore.putBoolean("login_skipped", false);
-                finish();
-                return true;
+                return onActionLogin();
             case R.id.action_home:
-                drawerLayout.closeDrawer(navigationView);
-                startActivityWithFlags(
-                        this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                return true;
+                return onActionHome();
             case R.id.action_about:
-                drawerLayout.closeDrawer(navigationView);
-                startActivityWithFlags(this, AboutActivity.class, Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                return true;
+                return onActionAbout();
             case R.id.action_settings:
-                drawerLayout.closeDrawer(navigationView);
-                startActivityWithFlags(this, SettingsActivity.class, Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                return true;
+                return onActionSettings();
             case R.id.action_introduction:
-                drawerLayout.closeDrawer(navigationView);
-                WelcomeActivity.startYourself(this);
-                return true;
+                return onActionIntroduction();
             case R.id.action_feedback:
-                drawerLayout.closeDrawer(navigationView);
-                Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO);
-                feedbackIntent.setType("message/rfc822");
-                feedbackIntent.setData(Uri.parse("mailto:"));
-                feedbackIntent.putExtra(Intent.EXTRA_EMAIL,
-                        new String[]{CommonsApplication.FEEDBACK_EMAIL});
-                feedbackIntent.putExtra(Intent.EXTRA_SUBJECT,
-                        String.format(CommonsApplication.FEEDBACK_EMAIL_SUBJECT,
-                                ConfigUtils.getVersionNameWithSha(getApplicationContext())));
-                try {
-                    startActivity(feedbackIntent);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, R.string.no_email_client, Toast.LENGTH_SHORT).show();
-                }
-                return true;
+                return onActionFeedback();
             case R.id.action_logout:
-                new AlertDialog.Builder(this)
-                        .setMessage(R.string.logout_verification)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
-                            BaseLogoutListener logoutListener = new BaseLogoutListener();
-                            CommonsApplication app = (CommonsApplication) getApplication();
-                            app.clearApplicationData(this, logoutListener);
-                        })
-                        .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel())
-                        .show();
-                return true;
+                return onActionLogout();
             case R.id.action_explore:
-                drawerLayout.closeDrawer(navigationView);
-                CategoryImagesActivity.startYourself(this, getString(R.string.title_activity_explore), FEATURED_IMAGES_CATEGORY);
-                return true;
+                return onActionExplore();
             case R.id.action_bookmarks:
-                drawerLayout.closeDrawer(navigationView);
-                BookmarksActivity.startYourself(this);
-                return true;
+                return onActionBookmarks();
             default:
                 Timber.e("Unknown option [%s] selected from the navigation menu", itemId);
                 return false;
         }
+    }
+
+    private boolean onActionLogin() {
+        drawerLayout.closeDrawer(navigationView);
+        startActivityWithFlags(
+                this, LoginActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        applicationKvStore.putBoolean("login_skipped", false);
+        finish();
+        return true;
+    }
+
+    private boolean onActionHome() {
+        drawerLayout.closeDrawer(navigationView);
+        startActivityWithFlags(
+                this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return true;
+    }
+
+    private boolean onActionAbout() {
+        drawerLayout.closeDrawer(navigationView);
+        startActivityWithFlags(this, AboutActivity.class, Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return true;
+    }
+
+    private boolean onActionSettings() {
+        drawerLayout.closeDrawer(navigationView);
+        startActivityWithFlags(this, SettingsActivity.class, Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return true;
+    }
+
+    private boolean onActionIntroduction() {
+        drawerLayout.closeDrawer(navigationView);
+        WelcomeActivity.startYourself(this);
+        return true;
+    }
+
+    private boolean onActionLogout() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.logout_verification)
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    BaseLogoutListener logoutListener = new BaseLogoutListener();
+                    CommonsApplication app = (CommonsApplication) getApplication();
+                    app.clearApplicationData(this, logoutListener);
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel())
+                .show();
+        return true;
+    }
+
+    private boolean onActionFeedback() {
+        drawerLayout.closeDrawer(navigationView);
+        Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO);
+        feedbackIntent.setType("message/rfc822");
+        feedbackIntent.setData(Uri.parse("mailto:"));
+        feedbackIntent.putExtra(Intent.EXTRA_EMAIL,
+                new String[]{CommonsApplication.FEEDBACK_EMAIL});
+        feedbackIntent.putExtra(Intent.EXTRA_SUBJECT,
+                String.format(CommonsApplication.FEEDBACK_EMAIL_SUBJECT,
+                        ConfigUtils.getVersionNameWithSha(getApplicationContext())));
+        try {
+            startActivity(feedbackIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.no_email_client, Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    private boolean onActionExplore() {
+        drawerLayout.closeDrawer(navigationView);
+        CategoryImagesActivity.startYourself(this, getString(R.string.title_activity_explore), FEATURED_IMAGES_CATEGORY);
+        return true;
+    }
+
+    private boolean onActionBookmarks() {
+        drawerLayout.closeDrawer(navigationView);
+        BookmarksActivity.startYourself(this);
+        return true;
     }
 
     private class BaseLogoutListener implements CommonsApplication.LogoutListener {
