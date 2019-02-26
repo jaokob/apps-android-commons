@@ -48,9 +48,7 @@ public class CampaignsPresenter implements BasePresenter {
 
     @Override public void onDetachView() {
         this.view = null;
-        if (disposable != null) {
-            disposable.dispose();
-        }
+        dispose();
     }
 
     /**
@@ -76,10 +74,7 @@ public class CampaignsPresenter implements BasePresenter {
                     @Override public void onSuccess(CampaignResponseDTO campaignResponseDTO) {
                         List<Campaign> campaigns = campaignResponseDTO.getCampaigns();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        if (campaigns == null || campaigns.isEmpty()) {
-                            Log.e(TAG, "The campaigns list is empty");
-                            view.showCampaigns(null);
-                        }
+                        checkCampaign(campaigns);
                         Collections.sort(campaigns, (campaign, t1) -> {
                             Date date1, date2;
                             try {
@@ -114,6 +109,26 @@ public class CampaignsPresenter implements BasePresenter {
                         Log.e(TAG, "could not fetch campaigns: " + e.getMessage());
                     }
                 });
+        }
+    }
+
+    /**
+     * Helper function that checks whether campaing list is empty or null
+     * @param campaigns list of campaigns
+     */
+    private void checkCampaign(List<Campaign> campaigns){
+        if (campaigns == null || campaigns.isEmpty()) {
+            Log.e(TAG, "The campaigns list is empty");
+            view.showCampaigns(null);
+        }
+    }
+
+    /**
+     * Helper function that will dispose disposable if it isn't already null
+     */
+    private void dispose(){
+        if (disposable != null) {
+            disposable.dispose();
         }
     }
 }
