@@ -285,11 +285,20 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
             return;
         }
 
-        /*
-        onOrientation changed is true whenever activities orientation changes. After orientation
-        change we want to refresh map significantly, doesn't matter if location changed significantly
-        or not. Thus, we included onOrientationChanged boolean to if clause
-         */
+        isOnOrientation(locationChangeType);
+
+        if (nearbyMapFragment != null && nearbyMapFragment.searchThisAreaButton != null) {
+            nearbyMapFragment.searchThisAreaButton.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * onOrientation changed is true whenever activities orientation changes. After orientation
+     * change we want to refresh map significantly, doesn't matter if location changed significantly
+     * or not. Thus, we included onOrientationChanged boolean to if clause
+     * @param locationChangeType defines if location changed significantly or slightly
+     */
+    private void isOnOrientation(LocationServiceManager.LocationChangeType locationChangeType){
         if (locationChangeType.equals(LOCATION_SIGNIFICANTLY_CHANGED)
                 || locationChangeType.equals(PERMISSION_JUST_GRANTED)
                 || locationChangeType.equals(MAP_UPDATED)
@@ -317,10 +326,6 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
             String gsonCurLatLng = gson.toJson(curLatLng);
             bundle.putString("CurLatLng", gsonCurLatLng);
             updateMapFragment(false,true, null, null);
-        }
-
-        if (nearbyMapFragment != null && nearbyMapFragment.searchThisAreaButton != null) {
-            nearbyMapFragment.searchThisAreaButton.setVisibility(View.GONE);
         }
     }
 
@@ -550,7 +555,7 @@ public class NearbyFragment extends CommonsDaggerSupportFragment
      * Updates already existing list fragment with bundle includes nearby places and boundary
      * coordinates
      */
-    private void updateListFragment() {
+    public void updateListFragment() {
         nearbyListFragment.setBundleForUpdates(bundle);
         nearbyListFragment.updateNearbyListSignificantly();
     }
