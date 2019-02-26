@@ -10,6 +10,7 @@ Group 9
 **URL:**  *https://github.com/commons-app/apps-android-commons*
 
 **Project Description:**
+
 *The Wikimedia Commons Android app allows users to upload pictures from their Android phone/tablet to Wikimedia Commons.*
 
 ## Selected issue
@@ -19,6 +20,7 @@ Group 9
 **URL:** *https://github.com/commons-app/apps-android-commons/issues/888*
 
 **Issue description:**
+
 *Address the very high cyclomatic complexity we are seeing from Codacy by breaking up Activities & Fragments according to one of the well-respected architectural patterns (MVP / MVVM / etc).*
 
 ## Onboarding experience
