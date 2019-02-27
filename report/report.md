@@ -105,6 +105,10 @@ Initially I spent about 4-5 hours on searching through different projects that w
 
 ### Philip
 
+Time spent:
+I spent 4-5 hours looking for suitable project and evaluating others suggestions. Building the project took about 8 hours as I had to install Android studios and build the actual project. I also faced some issues such as the project not being compatible with the latest gradle version. After this it took ~5h finding functions/classes to improve and improv them. Lastly ~5h were spend on creating UML diagrams in yEd Graph Editor.
+
+
 ## Overall experience
 
 The project is very large and the refactoring that could be done is very extensive. There has been some refactorings done to a number of high complexity functions with high measure of CCN and the complexity reductions have been recorded and most of them are refactored to a great extent. There is however much more possible refactorings that could be done and this group attempted at adressing as much refactoring as possible given the limited time-span.
