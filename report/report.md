@@ -273,6 +273,37 @@ No notable side effects was found for this function.
      */
 ```
 
+## NearbyMapFragment::setListeners
+
+No notable side effects was found for this function.
+
+```
+    /**
+     * Sets click listeners of FABs, and 2 bottom sheets
+     */
+```
+
+## PlaceRenderer::hookListeners
+
+No notable side effects was found for this function.
+
+```
+    /**
+     * Sets click listeners of view, cameraButton, galleryButton, and bookmarkButton
+     */
+```
+
+## FileProcessor::findOtherImages
+
+No notable side effects was found for this function.
+
+```
+    /**
+     * Find other images around the same location that were taken within the last 20 sec
+     * @param similarImageInterface
+     */
+```
+
 ## Overall experience
 
 The project is very large and the refactoring that could be done is very extensive. There has been some refactorings done to a number of high complexity functions with high measure of CCN and the complexity reductions have been recorded and most of them are refactored to a great extent. There is however much more possible refactorings that could be done and this group attempted at adressing as much refactoring as possible given the limited time-span.
