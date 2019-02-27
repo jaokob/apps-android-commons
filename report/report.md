@@ -123,7 +123,7 @@ I worked with the report. Structuring and writing.
 
 Initially I spent about 4-5 hours on searching through different projects that we could take up. It is possible that I even underestimated this time spent since the project that we chose for the previous lab ended up being not very appropriate for the task which made the task more difficult for us. So we tried to be very careful with project choice this time which meant a lot of searching through projects, familiarizing myself with the overall project and then deciding whether it could be an appropriate alternative for the task. The process of project choice and familiarizing ourselves with the projects were all being done remotely so we did not have any group meetings and we did all the communication through Slack. Once we did choose a project, the built instructions for me took quite some time. The instructions given by the project startup guide were actually not useful for me at all. Because I didn't do it their way and I did a different way to build the project which then meant that I had to figure out the small details of the project configuration process until successful build by myself. This then also took quite  a while. The reason I did it “my” way was because I was having trouble getting it to work when i followed the project’s startup guide. After successful build the rest of the time was spent on finding functions/classes that can be refactored further into having lower complexity as measured by their CCN, refactoring them and committing them to git. My commits then include the code refactored as well as the corresponding UML.
 
-Fuction requirements:
+Fuctions refactored:
 
 `BookmarkPicturesFragment::handleSuccess:`*Reduced CNN from **6 to 4** and average class CNN from **2.2 to 2.1**.*
 
@@ -131,6 +131,7 @@ Fuction requirements:
 
 `FilePicker::handleActivityResult issue:`*Reduced CNN from **16 to 6** and average class CNN from **2.2 to 2.2**.*
 
+*NOTE: My functions lacked specific unit test cases asnd the refactoring did not introduce any side effects.*
 
 ### Philip
 
