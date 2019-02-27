@@ -47,11 +47,22 @@ A general technique that was used when refactoring high complexity functions was
 
 ## Test logs
 
-Initially all the tests in the project passed. Everytime a refactoring was merged into master, the tests were re-execurted to ensure that the refactoring introduced to the code has not introduced bugs or changed code funtionality. The tests seem to pass just fine after the refactorings have been added.
+Initially all the tests in the project passed. Everytime a refactoring was merged into master, the tests were re-executed to ensure that the refactoring introduced to the code has not introduced bugs or changed code functionality. The tests seem to pass just fine after the refactorings have been added.
 
 ## Effort Spent
 
 ### Jakob
+
+Time spent:
+I did spend about 5-6 hours looking for suitable projects on github before us a a group settling on Jenny’s suggestion of the android commons app. This time included finding some suggestions, that ended up being taken in the spreadsheet before we could pick it. Furthermore, getting the project to build took some time for me. The commons app utilises gradle as a build tool, and supposedly that should make things easier, but it did not. Since gradle was complaining about an library not being found, The error was as follows: Could not find com.github.deano2390:MaterialShowcaseView:1.2.0. After some trial and error, which for me took about five hours in total, I could build the project. The walkthrough (https://github.com/commons-app/apps-android-commons/wiki/Quick-start-guide-for-Developers) was kind of lackluster since it did not mention the issue I encountered, which then required googling and troubleshooting on my own.
+
+Furthermore, I spent some time (1-2 hours) finding a suitable UML tool, I settled on Visual Paradigm, after trying out some android studio plugins which did not work at all.
+
+
+Additionally, I spent about 2-3 hours getting a feel for the project and its structure after succeeding in building it. I used lizard to identify classes with high mean CCN and functions with high cyclomatic complexity, as specified by the issue.
+
+Actual refactoring:
+
 
 ### Jenny
 
