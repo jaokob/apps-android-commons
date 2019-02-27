@@ -52,7 +52,8 @@ public class MainActivity extends AuthenticatedActivity implements FragmentManag
 
     @Inject
     SessionManager sessionManager;
-    @Inject ContributionController controller;
+    @Inject
+    ContributionController controller;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.pager)
@@ -91,7 +92,7 @@ public class MainActivity extends AuthenticatedActivity implements FragmentManag
         setTitle(getString(R.string.navigation_item_home)); // Should I create a new string variable with another name instead?
 
 
-        if (savedInstanceState != null ) {
+        if (savedInstanceState != null) {
             onOrientationChanged = true; // Will be used in nearby fragment to determine significant update of map
 
             //If nearby map was visible, call on Tab Selected to call all nearby operations
@@ -249,32 +250,34 @@ public class MainActivity extends AuthenticatedActivity implements FragmentManag
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (getSupportFragmentManager().findFragmentByTag(contributionsFragmentTag) != null && isContributionsFragmentVisible) {
-            // Meas that contribution fragment is visible (not nearby fragment)
-            ContributionsFragment contributionsFragment = (ContributionsFragment) getSupportFragmentManager().findFragmentByTag(contributionsFragmentTag);
-
-            if (contributionsFragment.getChildFragmentManager().findFragmentByTag(ContributionsFragment.MEDIA_DETAIL_PAGER_FRAGMENT_TAG) != null) {
-                // Means that media details fragment is visible to uer instead of contributions list fragment (As chils fragment)
-                // Then we want to go back to contributions list fragment on backbutton pressed from media detail fragment
-                contributionsFragment.getChildFragmentManager().popBackStack();
-                // Tabs were invisible when Media Details Fragment is active, make them visible again on Contrib List Fragment active
-                showTabs();
-                // Nearby Notification Card View was invisible when Media Details Fragment is active, make it visible again on Contrib List Fragment active, according to preferences
-                if (defaultKvStore.getBoolean("displayNearbyCardView", true)) {
-                    if (contributionsFragment.nearbyNotificationCardView.cardViewVisibilityState == NearbyNotificationCardView.CardViewVisibilityState.READY) {
-                        contributionsFragment.nearbyNotificationCardView.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    contributionsFragment.nearbyNotificationCardView.setVisibility(View.GONE);
-                }
-            } else {
-                finish();
-            }
+            // Means that contribution fragment is visible (not nearby fragment)
+            generateContributionsFragment(contributionsFragmentTag);
         } else if (getSupportFragmentManager().findFragmentByTag(nearbyFragmentTag) != null && !isContributionsFragmentVisible) {
             // Meas that nearby fragment is visible (not contributions fragment)
             // Set current item to contributions activity instead of closing the activity
             viewPager.setCurrentItem(0);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void generateContributionsFragment(String contributionsFragmentTag) {
+        // Create the ContributionsFragment to be displayed.
+        ContributionsFragment contributionsFragment = (ContributionsFragment) getSupportFragmentManager().findFragmentByTag(contributionsFragmentTag);
+        if (contributionsFragment.getChildFragmentManager().findFragmentByTag(ContributionsFragment.MEDIA_DETAIL_PAGER_FRAGMENT_TAG) != null) {
+            // Means that media details fragment is visible to user instead of contributions list fragment (As chils fragment)
+            // Then we want to go back to contributions list fragment on backbutton pressed from media detail fragment
+            contributionsFragment.getChildFragmentManager().popBackStack();
+            // Tabs were invisible when Media Details Fragment is active, make them visible again on Contrib List Fragment active
+            showTabs();
+            // Nearby Notification Card View was invisible when Media Details Fragment is active, make it visible again on Contrib List Fragment active, according to preferences
+            if (defaultKvStore.getBoolean("displayNearbyCardView", true) && contributionsFragment.nearbyNotificationCardView.cardViewVisibilityState == NearbyNotificationCardView.CardViewVisibilityState.READY) {
+                contributionsFragment.nearbyNotificationCardView.setVisibility(View.VISIBLE);
+            } else {
+                contributionsFragment.nearbyNotificationCardView.setVisibility(View.GONE);
+            }
+        } else {
+            finish();
         }
     }
 
@@ -467,27 +470,27 @@ public class MainActivity extends AuthenticatedActivity implements FragmentManag
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case LOCATION_REQUEST: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Timber.d("Location permission given");
-                    ((ContributionsFragment)contributionsActivityPagerAdapter
-                            .getItem(0)).locationManager.registerLocationManager();
-                } else {
-                    // If nearby fragment is visible and location permission is not given, send user back to contrib fragment
-                    if (!isContributionsFragmentVisible) {
-                        viewPager.setCurrentItem(CONTRIBUTIONS_TAB_POSITION);
-
-                        // TODO: If contrib fragment is visible and location permission is not given, display permission request button
-                    } else {
-
-                    }
-                }
+                onLocationRequest(grantResults);
                 return;
             }
 
             default:
                 return;
+        }
+    }
+
+    private void onLocationRequest(int[] grantResults) {
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Timber.d("Location permission given");
+            ((ContributionsFragment) contributionsActivityPagerAdapter
+                    .getItem(0)).locationManager.registerLocationManager();
+        } else if (!isContributionsFragmentVisible) {
+            // If nearby fragment is visible and location permission is not given, send user back to contrib fragment
+            viewPager.setCurrentItem(CONTRIBUTIONS_TAB_POSITION);
+
+            // TODO: If contrib fragment is visible and location permission is not given, display permission request button
         }
     }
 

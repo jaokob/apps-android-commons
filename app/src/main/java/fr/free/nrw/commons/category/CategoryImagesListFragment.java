@@ -221,18 +221,8 @@ public class CategoryImagesListFragment extends DaggerFragment {
                 .subscribe(this::handleSuccess, this::handleError);
     }
 
-    /**
-     * Handles the success scenario
-     * On first load, it initializes the grid view. On subsequent loads, it adds items to the adapter
-     * @param collection List of new Media to be displayed
-     */
-    private void handleSuccess(List<Media> collection) {
-        if (collection == null || collection.isEmpty()) {
-            initErrorView();
-            hasMoreImages = false;
-            return;
-        }
-
+    // helper function for Handle success to handle gridAdaptor
+    private void check_gridAdaptor(List<Media> collection){
         if (gridAdapter == null) {
             setAdapter(collection);
         } else {
@@ -252,6 +242,20 @@ public class CategoryImagesListFragment extends DaggerFragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Handles the success scenario
+     * On first load, it initializes the grid view. On subsequent loads, it adds items to the adapter
+     * @param collection List of new Media to be displayed
+     */
+    private void handleSuccess(List<Media> collection) {
+        if (collection == null || collection.isEmpty()) {
+            initErrorView();
+            hasMoreImages = false;
+            return;
+        }
+        check_gridAdaptor(collection);
         progressBar.setVisibility(GONE);
         isLoading = false;
         statusTextView.setVisibility(GONE);
