@@ -231,6 +231,45 @@ No notable side effects was found for this function.
      * @return
      */
 ```
+
+## MainActivity::onBackPressed
+
+No notable side effects was found for this function.
+
+```
+    /**
+     * Called when the activity has detected the user's press of the back
+     * key. The default implementation simply finishes the current activity,
+     * but you can override this to do whatever you want.
+     */
+```
+
+## MainActivity::onRequestPermissionsResult
+
+No notable side effects was found for this function.
+
+```
+    /**
+     * Callback for the result from requesting permissions. This method 
+     * is invoked for every call on requestPermissions(String[], int).
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+```
+
+## NavigationBaseActivity::onNavigationItemSelected
+
+No notable side effects was found for this function.
+
+```
+    /**
+     * Called when an item in the navigation menu is selected.
+     * @param item the menu item selected
+     * @return bool
+     */
+```
+
 ## Overall experience
 
 The project is very large and the refactoring that could be done is very extensive. There has been some refactorings done to a number of high complexity functions with high measure of CCN and the complexity reductions have been recorded and most of them are refactored to a great extent. There is however much more possible refactorings that could be done and this group attempted at adressing as much refactoring as possible given the limited time-span.
