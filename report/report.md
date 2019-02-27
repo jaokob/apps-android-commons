@@ -106,6 +106,14 @@ Finding suitable functions to refactor took long time because many of the functi
 
 `FileProcessor::findOtherImages:` *Reduced CNN from **11 to 8** and average class CNN from **3.4 to 3.1**.*
 
+`BookmarkPicturesFragment::handleSuccess:`*Reduced CNN from **6 to 4** and average class CNN from **2.2 to 2.1**.*
+
+`CategoryImagesListFragment::handleSuccess:`*Reduced CNN from **7 to 3** and average class CNN from **2.6 to 2.5**.*
+
+`FilePicker::handleActivityResult issue:`*Reduced CNN from **16 to 6** and average class CNN from **2.2 to 2.2**.*
+
+
+
 *NOTE: There were no unit testing of my chosen functions.*
 
 ##### UML: 5h
@@ -130,6 +138,9 @@ I spent 4-5 hours looking for suitable project and evaluating others suggestions
 # Requirements
 
 ## NearbyFragment::updateMapFragment
+
+No notable side effects was found for this function.
+
 ```
      /**
      * Updates map fragment,
@@ -140,6 +151,9 @@ I spent 4-5 hours looking for suitable project and evaluating others suggestions
 ```
 
 ## NearbyFragment::refreshView
+
+No notable side effects was found for this function.
+
 ```
      /**
      * This method should be the single point to load/refresh nearby places
@@ -149,6 +163,9 @@ I spent 4-5 hours looking for suitable project and evaluating others suggestions
 ```
 
 ## CampaignsPresenter::getCampaigns
+
+No notable side effects was found for this function.
+
 ```
 /**
  * The presenter for the campaigns view, fetches the campaigns from the api and informs the view on
@@ -156,6 +173,41 @@ I spent 4-5 hours looking for suitable project and evaluating others suggestions
  * make the api call to fetch the campaigns
  */
 ```
+
+## FilePicker::handleActivityResult issue
+
+No notable side effects was found for this function.
+
+```
+/**
+ * Handles the results of the activities doen with respect to files.
+ */
+```
+
+## CategoryImagesListFragment::handleSuccess issue
+
+No notable side effects was found for this function.
+
+```
+/**
+     * Handles the success scenario
+     * On first load, it initializes the grid view. On subsequent loads, it adds items to the adapter
+     * @param collection List of new Media to be displayed
+ */
+```
+
+## BookmarkPicturesFragment::handleSuccess
+
+No notable side effects was found for this function.
+
+```
+/**
+     * Handles the success scenario
+     * On first load, it initializes the grid view. On subsequent loads, it adds items to the adapter
+     * @param collection List of new Media to be displayed
+ */
+```
+
 ## Overall experience
 
 The project is very large and the refactoring that could be done is very extensive. There has been some refactorings done to a number of high complexity functions with high measure of CCN and the complexity reductions have been recorded and most of them are refactored to a great extent. There is however much more possible refactorings that could be done and this group attempted at adressing as much refactoring as possible given the limited time-span.
