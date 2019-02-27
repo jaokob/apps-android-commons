@@ -61,7 +61,8 @@ Furthermore, I spent some time (1-2 hours) finding a suitable UML tool, I settle
 
 Additionally, I spent about 2-3 hours getting a feel for the project and its structure after succeeding in building it. I used lizard to identify classes with high mean CCN and functions with high cyclomatic complexity, as specified by the issue.
 
-Actual refactoring:
+Actual refactoring: 4 hours
+I refactored two classe and reduced their mean CCN.
 
 
 ### Jenny
