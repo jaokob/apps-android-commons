@@ -76,10 +76,17 @@ Whilst there is some wikis for the project we encountered problems with building
 #### Refactoring: 13h
 ###### MainActivity
 Lowered average class cyclomatic complexity number from 2.11 to 2.0
-Addressed functions was onBackPressed and onRequestPermissionsResult. The functions were given helper functions and some of the logic was simplified. The refactoring did not increase the need for test or fail any of the previous tests.
+Addressed functions was first `onBackPressed` which is called when the activity has detected the user's press of the back key. This function modifies the view based on the current navigation. The CNN for this function was reduced to 5 from 9.
+The function `onRequestPermissionsResult` was also addressed  for which CNN was reduced to 3 from 5. This function is a callback for the result from requesting permissions. This instance only separates and specifically handles location requests based on if permission is granted.
+
+The functions were given helper functions and some of the logic was simplified. The refactoring did not increase the need for test or fail any of the previous tests.
+
 ###### NavigationBaseActivity
 Lowered average class cyclomatic complexity number from 2.5 to 1.9
-Addressed function was onNavigationItemSelected. The item identification and event handling was split up into separate functions to provide more readable code and a lower class complexity.  The refactoring did not increase the need for test or fail any of the previous tests.
+Addressed function was `onNavigationItemSelected` for which CNN was reduced to 10 from 11. The function 
+is called when an item in the navigation menu is selected.The input is the selected item and it returns true to display the item as the selected item.
+
+The item identification and event handling was split up into separate functions to provide more readable code and a lower class complexity.  The refactoring did not increase the need for test or fail any of the previous tests.
 
 ### Fredrik
 
